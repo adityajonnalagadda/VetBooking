@@ -117,6 +117,87 @@ def dashboard():
         fullname=session["fullname"]
     )
 
+@app.route("/pets")
+def pets():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM pets
+        WHERE user_id=%s
+        ORDER BY id DESC
+        """,
+        (session["user_id"],)
+    )
+
+    pet_list = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "pets.html",
+        pets=pet_list
+    )
+
+@app.route("/add_pet", methods=["GET", "POST"])
+def add_pet():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+
+        pet_name = request.form["pet_name"]
+        species = request.form["species"]
+        breed = request.form["breed"]
+        age = request.form["age"]
+        weight = request.form["weight"]
+        medical_notes = request.form["medical_notes"]
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            INSERT INTO pets
+            (
+                user_id,
+                pet_name,
+                species,
+                breed,
+                age,
+                weight,
+                medical_notes
+            )
+            VALUES
+            (%s,%s,%s,%s,%s,%s,%s)
+            """,
+            (
+                session["user_id"],
+                pet_name,
+                species,
+                breed,
+                age,
+                weight,
+                medical_notes
+            )
+        )
+
+        cursor.close()
+        conn.close()
+
+        flash("Pet Added Successfully")
+
+        return redirect(url_for("pets"))
+
+    return render_template("add_pet.html")
 
 @app.route("/logout")
 def logout():

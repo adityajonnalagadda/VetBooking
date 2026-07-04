@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Pet</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-success text-white">
+
+            <h3>Add New Pet</h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                <div class="mb-3">
+
+                    <label class="form-label">Pet Name</label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="pet_name"
+                        required>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Species</label>
+
+                    <select
+                        class="form-select"
+                        name="species">
+
+                        <option>Dog</option>
+                        <option>Cat</option>
+                        <option>Rabbit</option>
+                        <option>Bird</option>
+                        <option>Other</option>
+
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Breed</label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="breed">
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="mb-3">
+
+                            <label>Age</label>
+
+                            <input
+                                type="number"
+                                class="form-control"
+                                name="age">
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="mb-3">
+
+                            <label>Weight (kg)</label>
+
+                            <input
+                                type="number"
+                                step="0.1"
+                                class="form-control"
+                                name="weight">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>Medical Notes</label>
+
+                    <textarea
+                        class="form-control"
+                        rows="4"
+                        name="medical_notes"></textarea>
+
+                </div>
+
+                <button class="btn btn-success">
+
+                    Save Pet
+
+                </button>
+
+                <a
+                    href="/pets"
+                    class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

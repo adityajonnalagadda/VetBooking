@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>My Pets</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+<h2 class="mb-4">
+
+🐶 My Pets
+
+</h2>
+
+<a
+href="/dashboard"
+class="btn btn-secondary">
+
+Dashboard
+
+</a>
+
+<a
+href="/add_pet"
+class="btn btn-success">
+
+Add Pet
+
+</a>
+
+<hr>
+
+{% if pets %}
+
+<table class="table table-bordered table-striped">
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+
+<th>Species</th>
+
+<th>Breed</th>
+
+<th>Age</th>
+
+<th>Weight</th>
+
+<th>Medical Notes</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for pet in pets %}
+
+<tr>
+
+<td>{{ pet.pet_name }}</td>
+
+<td>{{ pet.species }}</td>
+
+<td>{{ pet.breed }}</td>
+
+<td>{{ pet.age }}</td>
+
+<td>{{ pet.weight }}</td>
+
+<td>{{ pet.medical_notes }}</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% else %}
+
+<div class="alert alert-info">
+
+No pets registered yet.
+
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>
