@@ -452,6 +452,88 @@ def cancel_appointment(id):
 
     return redirect(url_for("appointments"))
 
+@app.route("/vet_dashboard")
+def vet_dashboard():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            appointments.id,
+            pets.pet_name,
+            users.fullname AS owner_name,
+            veterinarians.fullname AS vet_name,
+            appointment_date,
+            appointment_time,
+            service_type,
+            status,
+            notes
+        FROM appointments
+        JOIN pets
+            ON appointments.pet_id = pets.id
+        JOIN users
+            ON appointments.user_id = users.id
+        LEFT JOIN veterinarians
+            ON appointments.vet_id = veterinarians.id
+        ORDER BY appointment_date, appointment_time
+    """)
+
+    appointments = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "vet_dashboard.html",
+        appointments=appointments
+    )
+
+@app.route("/confirm_appointment/<int:id>")
+def confirm_appointment(id):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE appointments
+        SET status='Confirmed'
+        WHERE id=%s
+    """, (id,))
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    flash("Appointment confirmed.")
+
+    return redirect(url_for("vet_dashboard"))
+
+@app.route("/complete_appointment/<int:id>")
+def complete_appointment(id):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE appointments
+        SET status='Completed'
+        WHERE id=%s
+    """, (id,))
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    flash("Appointment completed.")
+
+    return redirect(url_for("vet_dashboard"))
+
 @app.route("/logout")
 def logout():
 

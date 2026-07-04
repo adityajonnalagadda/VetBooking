@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Veterinarian Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+<h2>👨‍⚕️ Veterinarian Dashboard</h2>
+
+<a href="/dashboard" class="btn btn-secondary mb-3">
+
+Back
+
+</a>
+
+<table class="table table-bordered table-hover">
+
+<thead class="table-dark">
+
+<tr>
+
+<th>ID</th>
+
+<th>Pet</th>
+
+<th>Owner</th>
+
+<th>Veterinarian</th>
+
+<th>Date</th>
+
+<th>Time</th>
+
+<th>Service</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for appointment in appointments %}
+
+<tr>
+
+<td>{{ appointment.id }}</td>
+
+<td>{{ appointment.pet_name }}</td>
+
+<td>{{ appointment.owner_name }}</td>
+
+<td>{{ appointment.vet_name }}</td>
+
+<td>{{ appointment.appointment_date }}</td>
+
+<td>{{ appointment.appointment_time }}</td>
+
+<td>{{ appointment.service_type }}</td>
+
+<td>{{ appointment.status }}</td>
+
+<td>
+
+{% if appointment.status=="Pending" %}
+
+<a
+href="/confirm_appointment/{{ appointment.id }}"
+class="btn btn-primary btn-sm">
+
+Confirm
+
+</a>
+
+{% elif appointment.status=="Confirmed" %}
+
+<a
+href="/complete_appointment/{{ appointment.id }}"
+class="btn btn-success btn-sm">
+
+Complete
+
+</a>
+
+{% else %}
+
+-
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</body>
+
+</html>
