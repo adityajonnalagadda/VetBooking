@@ -293,6 +293,92 @@ def delete_pet(pet_id):
 
     return redirect(url_for("pets"))
 
+@app.route("/book_appointment", methods=["GET", "POST"])
+def book_appointment():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    if request.method == "POST":
+
+        pet_id = request.form["pet_id"]
+        vet_id = request.form["vet_id"]
+        appointment_date = request.form["appointment_date"]
+        appointment_time = request.form["appointment_time"]
+        service_type = request.form["service_type"]
+        address = request.form["address"]
+        notes = request.form["notes"]
+
+        cursor.execute(
+            """
+            INSERT INTO appointments
+            (
+                user_id,
+                pet_id,
+                vet_id,
+                appointment_date,
+                appointment_time,
+                service_type,
+                address,
+                notes
+            )
+            VALUES
+            (%s,%s,%s,%s,%s,%s,%s,%s)
+            """,
+            (
+                session["user_id"],
+                pet_id,
+                vet_id,
+                appointment_date,
+                appointment_time,
+                service_type,
+                address,
+                notes
+            )
+        )
+
+        conn.commit()
+
+        flash("Appointment booked successfully.")
+
+        cursor.close()
+        conn.close()
+
+        return redirect(url_for("appointments"))
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM pets
+        WHERE user_id=%s
+        """,
+        (session["user_id"],)
+    )
+
+    pets = cursor.fetchall()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM veterinarians
+        ORDER BY fullname
+        """
+    )
+
+    vets = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "book_appointment.html",
+        pets=pets,
+        vets=vets
+    )
+
 @app.route("/logout")
 def logout():
 
