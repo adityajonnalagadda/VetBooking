@@ -420,6 +420,38 @@ def appointments():
         appointments=appointments
     )
 
+@app.route("/cancel_appointment/<int:id>")
+def cancel_appointment(id):
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE appointments
+        SET status='Cancelled'
+        WHERE id=%s
+        AND user_id=%s
+        AND status='Pending'
+        """,
+        (
+            id,
+            session["user_id"]
+        )
+    )
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    flash("Appointment cancelled successfully.")
+
+    return redirect(url_for("appointments"))
+
 @app.route("/logout")
 def logout():
 

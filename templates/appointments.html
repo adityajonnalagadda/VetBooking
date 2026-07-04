@@ -46,6 +46,7 @@ Back to Dashboard
 <th>Service</th>
 
 <th>Status</th>
+<th>Action</th>
 
 </tr>
 
@@ -102,6 +103,27 @@ Completed
 Cancelled
 
 </span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+{% if appointment.status=="Pending" %}
+
+<a
+href="/cancel_appointment/{{ appointment.id }}"
+class="btn btn-danger btn-sm"
+onclick="return confirm('Cancel this appointment?')">
+
+Cancel
+
+</a>
+
+{% else %}
+
+-
 
 {% endif %}
 
