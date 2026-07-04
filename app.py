@@ -729,7 +729,7 @@ def logout():
 
     session.clear()
 
-    return redirect(url_for("login"))
+    return redirect(url_for("index"))
 
 @app.route("/vet_logout")
 def vet_logout():
