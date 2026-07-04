@@ -199,6 +199,100 @@ def add_pet():
 
     return render_template("add_pet.html")
 
+@app.route("/edit_pet/<int:pet_id>", methods=["GET", "POST"])
+def edit_pet(pet_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    if request.method == "POST":
+
+        pet_name = request.form["pet_name"]
+        species = request.form["species"]
+        breed = request.form["breed"]
+        age = request.form["age"]
+        weight = request.form["weight"]
+        medical_notes = request.form["medical_notes"]
+
+        cursor.execute(
+            """
+            UPDATE pets
+            SET
+                pet_name=%s,
+                species=%s,
+                breed=%s,
+                age=%s,
+                weight=%s,
+                medical_notes=%s
+            WHERE id=%s
+            AND user_id=%s
+            """,
+            (
+                pet_name,
+                species,
+                breed,
+                age,
+                weight,
+                medical_notes,
+                pet_id,
+                session["user_id"]
+            )
+        )
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        flash("Pet updated successfully.")
+        return redirect(url_for("pets"))
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM pets
+        WHERE id=%s
+        AND user_id=%s
+        """,
+        (pet_id, session["user_id"])
+    )
+
+    pet = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    return render_template("edit_pet.html", pet=pet)
+
+@app.route("/delete_pet/<int:pet_id>")
+def delete_pet(pet_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        DELETE FROM pets
+        WHERE id=%s
+        AND user_id=%s
+        """,
+        (pet_id, session["user_id"])
+    )
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    flash("Pet deleted successfully.")
+
+    return redirect(url_for("pets"))
+
 @app.route("/logout")
 def logout():
 

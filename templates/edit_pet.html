@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Edit Pet</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+<div class="card">
+
+<div class="card-header bg-warning">
+
+<h3>Edit Pet</h3>
+
+</div>
+
+<div class="card-body">
+
+<form method="POST">
+
+<label>Pet Name</label>
+
+<input
+class="form-control"
+name="pet_name"
+value="{{ pet.pet_name }}"
+required>
+
+<br>
+
+<label>Species</label>
+
+<input
+class="form-control"
+name="species"
+value="{{ pet.species }}">
+
+<br>
+
+<label>Breed</label>
+
+<input
+class="form-control"
+name="breed"
+value="{{ pet.breed }}">
+
+<br>
+
+<label>Age</label>
+
+<input
+class="form-control"
+type="number"
+name="age"
+value="{{ pet.age }}">
+
+<br>
+
+<label>Weight</label>
+
+<input
+class="form-control"
+type="number"
+step="0.1"
+name="weight"
+value="{{ pet.weight }}">
+
+<br>
+
+<label>Medical Notes</label>
+
+<textarea
+class="form-control"
+name="medical_notes">{{ pet.medical_notes }}</textarea>
+
+<br>
+
+<button class="btn btn-success">
+Save Changes
+</button>
+
+<a href="/pets" class="btn btn-secondary">
+Cancel
+</a>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
