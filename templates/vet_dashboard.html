@@ -11,17 +11,45 @@
 
 <body class="bg-light">
 
-<div class="container mt-5">
+<nav class="navbar navbar-dark bg-dark">
 
-<h2>👨‍⚕️ Veterinarian Dashboard</h2>
+<div class="container">
 
-<a href="/dashboard" class="btn btn-secondary mb-3">
+<span class="navbar-brand">
 
-Back
+🏥 Veterinarian Dashboard
+
+</span>
+
+<div>
+
+<span class="text-white me-3">
+
+Welcome Dr. {{ vet_name }}
+
+</span>
+
+<a href="/vet_logout" class="btn btn-danger">
+
+Logout
 
 </a>
 
-<table class="table table-bordered table-hover">
+</div>
+
+</div>
+
+</nav>
+
+<div class="container mt-4">
+
+<h3 class="mb-4">
+
+Today's Appointments
+
+</h3>
+
+<table class="table table-bordered table-hover bg-white">
 
 <thead class="table-dark">
 
@@ -69,7 +97,43 @@ Back
 
 <td>{{ appointment.service_type }}</td>
 
-<td>{{ appointment.status }}</td>
+<td>
+
+{% if appointment.status=="Pending" %}
+
+<span class="badge bg-warning text-dark">
+
+Pending
+
+</span>
+
+{% elif appointment.status=="Confirmed" %}
+
+<span class="badge bg-primary">
+
+Confirmed
+
+</span>
+
+{% elif appointment.status=="Completed" %}
+
+<span class="badge bg-success">
+
+Completed
+
+</span>
+
+{% else %}
+
+<span class="badge bg-danger">
+
+Cancelled
+
+</span>
+
+{% endif %}
+
+</td>
 
 <td>
 
