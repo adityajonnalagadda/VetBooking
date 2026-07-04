@@ -542,7 +542,23 @@ def payment(appointment_id):
 
     conn = get_connection()
     cursor = conn.cursor()
+    cursor.execute("""
+    SELECT *
+    FROM payments
+    WHERE appointment_id=%s
+    """, (appointment_id,))
+    
+    existing_payment = cursor.fetchone()
+    if existing_payment:
+        cursor.close()
+        conn.close()
 
+        return redirect(
+            url_for(
+                "receipt",
+                 payment_id=existing_payment["id"]
+            )
+        )
     cursor.execute("""
         SELECT
             appointments.id,
@@ -634,6 +650,43 @@ def receipt(payment_id):
     return render_template(
         "receipt.html",
         payment=payment
+    )
+
+@app.route("/payments")
+def payments():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            payments.id,
+            pets.pet_name,
+            payments.amount,
+            payments.payment_method,
+            payments.payment_status,
+            payments.payment_date
+        FROM payments
+        JOIN appointments
+            ON payments.appointment_id = appointments.id
+        JOIN pets
+            ON appointments.pet_id = pets.id
+        WHERE appointments.user_id=%s
+        ORDER BY payment_date DESC
+    """,
+    (session["user_id"],))
+
+    payments = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "payments.html",
+        payments=payments
     )
 
 @app.route("/logout")

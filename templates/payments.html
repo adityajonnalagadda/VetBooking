@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Payment History</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+<h2>💳 Payment History</h2>
+
+<a href="/dashboard" class="btn btn-secondary mb-3">
+
+Back to Dashboard
+
+</a>
+
+<table class="table table-bordered table-hover">
+
+<thead class="table-dark">
+
+<tr>
+
+<th>ID</th>
+<th>Pet</th>
+<th>Amount</th>
+<th>Method</th>
+<th>Status</th>
+<th>Date</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for payment in payments %}
+
+<tr>
+
+<td>{{ payment.id }}</td>
+
+<td>{{ payment.pet_name }}</td>
+
+<td>₹{{ payment.amount }}</td>
+
+<td>{{ payment.payment_method }}</td>
+
+<td>{{ payment.payment_status }}</td>
+
+<td>{{ payment.payment_date }}</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</body>
+
+</html>
