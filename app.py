@@ -580,7 +580,7 @@ def payment(appointment_id):
         ))
 
         conn.commit()
-
+        payment_id = cursor.lastrowid
         cursor.close()
         conn.close()
 
@@ -598,6 +598,42 @@ def payment(appointment_id):
         "payment.html",
         appointment=appointment,
         amount=amount
+    )
+
+@app.route("/receipt/<int:payment_id>")
+def receipt(payment_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            payments.id,
+            payments.amount,
+            payments.payment_method,
+            payments.payment_status,
+            payments.payment_date,
+            pets.pet_name,
+            appointments.service_type
+        FROM payments
+        JOIN appointments
+            ON payments.appointment_id = appointments.id
+        JOIN pets
+            ON appointments.pet_id = pets.id
+        WHERE payments.id=%s
+    """, (payment_id,))
+
+    payment = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "receipt.html",
+        payment=payment
     )
 
 @app.route("/logout")
