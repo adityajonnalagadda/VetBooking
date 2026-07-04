@@ -25,6 +25,24 @@ Back to Dashboard
 
 </a>
 
+{% with messages=get_flashed_messages() %}
+
+{% if messages %}
+
+{% for message in messages %}
+
+<div class="alert alert-success">
+
+{{ message }}
+
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+{% endwith %}
+
 {% if appointments %}
 
 <table class="table table-bordered table-hover bg-white">
@@ -34,46 +52,13 @@ Back to Dashboard
 <tr>
 
 <th>ID</th>
-
 <th>Pet</th>
-
 <th>Veterinarian</th>
-
 <th>Date</th>
-
 <th>Time</th>
-
 <th>Service</th>
-
 <th>Status</th>
 <th>Action</th>
-<td>
-
-{% if appointment.status=="Confirmed" %}
-
-<a
-href="/payment/{{ appointment.id }}"
-class="btn btn-success btn-sm">
-
-Pay
-
-</a>
-
-{% elif appointment.status=="Completed" %}
-
-<span class="badge bg-success">
-
-Paid / Completed
-
-</span>
-
-{% else %}
-
--
-
-{% endif %}
-
-</td>
 <th>Payment</th>
 
 </tr>
@@ -103,33 +88,25 @@ Paid / Completed
 {% if appointment.status=="Pending" %}
 
 <span class="badge bg-warning text-dark">
-
 Pending
-
 </span>
 
 {% elif appointment.status=="Confirmed" %}
 
 <span class="badge bg-primary">
-
 Confirmed
-
 </span>
 
 {% elif appointment.status=="Completed" %}
 
 <span class="badge bg-success">
-
 Completed
-
 </span>
 
 {% else %}
 
 <span class="badge bg-danger">
-
 Cancelled
-
 </span>
 
 {% endif %}
@@ -148,6 +125,34 @@ onclick="return confirm('Cancel this appointment?')">
 Cancel
 
 </a>
+
+{% else %}
+
+-
+
+{% endif %}
+
+</td>
+
+<td>
+
+{% if appointment.status=="Confirmed" %}
+
+<a
+href="/payment/{{ appointment.id }}"
+class="btn btn-success btn-sm">
+
+Pay
+
+</a>
+
+{% elif appointment.status=="Completed" %}
+
+<span class="badge bg-success">
+
+Paid / Completed
+
+</span>
 
 {% else %}
 
