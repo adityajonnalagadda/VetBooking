@@ -379,6 +379,47 @@ def book_appointment():
         vets=vets
     )
 
+@app.route("/appointments")
+def appointments():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT
+            appointments.id,
+            pets.pet_name,
+            veterinarians.fullname,
+            appointment_date,
+            appointment_time,
+            service_type,
+            status
+        FROM appointments
+        JOIN pets
+            ON appointments.pet_id = pets.id
+        LEFT JOIN veterinarians
+            ON appointments.vet_id = veterinarians.id
+        WHERE appointments.user_id = %s
+        ORDER BY appointment_date DESC,
+                 appointment_time DESC
+        """,
+        (session["user_id"],)
+    )
+
+    appointments = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "appointments.html",
+        appointments=appointments
+    )
+
 @app.route("/logout")
 def logout():
 

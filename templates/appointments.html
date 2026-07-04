@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Appointment History</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+<h2 class="mb-4">
+
+📅 My Appointments
+
+</h2>
+
+<a href="/dashboard" class="btn btn-secondary mb-3">
+
+Back to Dashboard
+
+</a>
+
+{% if appointments %}
+
+<table class="table table-bordered table-hover bg-white">
+
+<thead class="table-dark">
+
+<tr>
+
+<th>ID</th>
+
+<th>Pet</th>
+
+<th>Veterinarian</th>
+
+<th>Date</th>
+
+<th>Time</th>
+
+<th>Service</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for appointment in appointments %}
+
+<tr>
+
+<td>{{ appointment.id }}</td>
+
+<td>{{ appointment.pet_name }}</td>
+
+<td>{{ appointment.fullname }}</td>
+
+<td>{{ appointment.appointment_date }}</td>
+
+<td>{{ appointment.appointment_time }}</td>
+
+<td>{{ appointment.service_type }}</td>
+
+<td>
+
+{% if appointment.status=="Pending" %}
+
+<span class="badge bg-warning text-dark">
+
+Pending
+
+</span>
+
+{% elif appointment.status=="Confirmed" %}
+
+<span class="badge bg-primary">
+
+Confirmed
+
+</span>
+
+{% elif appointment.status=="Completed" %}
+
+<span class="badge bg-success">
+
+Completed
+
+</span>
+
+{% else %}
+
+<span class="badge bg-danger">
+
+Cancelled
+
+</span>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% else %}
+
+<div class="alert alert-info">
+
+No appointments booked yet.
+
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>
