@@ -3,6 +3,8 @@ from db import get_connection
 from config import Config
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
+
 app = Flask(__name__)
 app.config.from_object(Config)
 
@@ -20,7 +22,6 @@ def register():
         fullname = request.form["fullname"]
         email = request.form["email"]
         password = generate_password_hash(request.form["password"])
-        hashed_password = generate_password_hash(password)
         phone = request.form["phone"]
 
         conn = get_connection()
@@ -51,7 +52,7 @@ def register():
             (
                 fullname,
                 email,
-                hashed_password,
+                password,
                 phone
             )
         )
