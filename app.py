@@ -104,6 +104,40 @@ def login():
 
     return render_template("login.html")
 
+@app.route("/vet_login", methods=["GET", "POST"])
+def vet_login():
+
+    if request.method == "POST":
+
+        email = request.form["email"]
+        password = request.form["password"]
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT *
+            FROM veterinarians
+            WHERE email=%s
+        """, (email,))
+
+        vet = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        if vet and check_password_hash(vet["password"], password):
+
+            session.clear()
+
+            session["vet_id"] = vet["id"]
+            session["vet_name"] = vet["fullname"]
+
+            return redirect(url_for("vet_dashboard"))
+
+        flash("Invalid Email or Password")
+
+    return render_template("vet_login.html")
 
 @app.route("/dashboard")
 def dashboard():
@@ -455,8 +489,8 @@ def cancel_appointment(id):
 @app.route("/vet_dashboard")
 def vet_dashboard():
 
-    if "user_id" not in session:
-        return redirect(url_for("login"))
+    if "vet_id" not in session:
+        return redirect(url_for("vet_login"))
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -489,7 +523,8 @@ def vet_dashboard():
 
     return render_template(
         "vet_dashboard.html",
-        appointments=appointments
+        appointments=appointments,
+        vet_name=session["vet_name"]
     )
 
 @app.route("/confirm_appointment/<int:id>")
