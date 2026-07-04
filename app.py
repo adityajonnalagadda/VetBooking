@@ -534,6 +534,72 @@ def complete_appointment(id):
 
     return redirect(url_for("vet_dashboard"))
 
+@app.route("/payment/<int:appointment_id>", methods=["GET", "POST"])
+def payment(appointment_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            appointments.id,
+            pets.pet_name,
+            service_type
+        FROM appointments
+        JOIN pets
+            ON appointments.pet_id = pets.id
+        WHERE appointments.id=%s
+    """, (appointment_id,))
+
+    appointment = cursor.fetchone()
+
+    amount = 500
+
+    if request.method == "POST":
+
+        payment_method = request.form["payment_method"]
+
+        cursor.execute("""
+            INSERT INTO payments
+            (
+                appointment_id,
+                amount,
+                payment_status,
+                payment_method
+            )
+            VALUES
+            (%s,%s,'Paid',%s)
+        """,
+        (
+            appointment_id,
+            amount,
+            payment_method
+        ))
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+        return redirect(
+            url_for(
+                "receipt",
+                payment_id=appointment_id
+            )
+        )
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "payment.html",
+        appointment=appointment,
+        amount=amount
+    )
+
 @app.route("/logout")
 def logout():
 

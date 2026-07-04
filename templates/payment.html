@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Payment</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+<div class="card shadow">
+
+<div class="card-header bg-success text-white">
+
+<h3>Payment</h3>
+
+</div>
+
+<div class="card-body">
+
+<h5>
+
+Pet:
+
+{{ appointment.pet_name }}
+
+</h5>
+
+<h5>
+
+Service:
+
+{{ appointment.service_type }}
+
+</h5>
+
+<h4 class="text-primary">
+
+Amount: ₹{{ amount }}
+
+</h4>
+
+<form method="POST">
+
+<div class="mb-3">
+
+<label>
+
+Payment Method
+
+</label>
+
+<select
+class="form-select"
+name="payment_method">
+
+<option>UPI</option>
+
+<option>Credit Card</option>
+
+<option>Debit Card</option>
+
+<option>Cash</option>
+
+</select>
+
+</div>
+
+<button class="btn btn-success">
+
+Pay Now
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

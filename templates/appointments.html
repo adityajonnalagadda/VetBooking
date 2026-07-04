@@ -47,6 +47,34 @@ Back to Dashboard
 
 <th>Status</th>
 <th>Action</th>
+<td>
+
+{% if appointment.status=="Confirmed" %}
+
+<a
+href="/payment/{{ appointment.id }}"
+class="btn btn-success btn-sm">
+
+Pay
+
+</a>
+
+{% elif appointment.status=="Completed" %}
+
+<span class="badge bg-success">
+
+Paid / Completed
+
+</span>
+
+{% else %}
+
+-
+
+{% endif %}
+
+</td>
+<th>Payment</th>
 
 </tr>
 
