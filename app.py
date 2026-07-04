@@ -19,7 +19,7 @@ def register():
 
         fullname = request.form["fullname"]
         email = request.form["email"]
-        password = request.form["password"]
+        password = generate_password_hash(request.form["password"])
         hashed_password = generate_password_hash(password)
         phone = request.form["phone"]
 
